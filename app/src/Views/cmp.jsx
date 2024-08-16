@@ -1,10 +1,11 @@
 import React from "react";
 import style from "./cmp.css";
+import { logDOM } from "@testing-library/react";
 
 class Main extends React.Component {
   state = {
-    output: "C:/Users/qscvd/Documents/Vid/sound",
-    name: "",
+    output: "D:/backend0/audio",
+    url: "",
     loading: false,
     edit_output: false,
   };
@@ -16,11 +17,11 @@ class Main extends React.Component {
           <label>Nhập Url Youtube: </label>
           <input
             type="text"
-            // disabled={this.state.loading}
-            value={this.state.name}
+            disabled={this.state.loading}
+            value={this.state.url}
             onChange={(e) => {
               this.setState({
-                name: e.target.value,
+                url: e.target.value,
               });
             }}
           />
@@ -46,8 +47,41 @@ class Main extends React.Component {
 
         <button
           type="submit"
-          // disabled={this.state.loading}
-          onClick={this.setState({ loading: true })}
+          disabled={this.state.loading}
+          onClick={() => {
+            this.setState({ loading: true });
+            const url = this.state.url;
+            const output = this.state.output;
+            console.log(url, output);
+            fetch("http://localhost:5000/api/download", {
+              method: "POST", // Thay đổi phương thức thành POST
+              headers: {
+                "Content-Type": "application/json", // Đặt loại nội dung là JSON
+              },
+              body: JSON.stringify({
+                url: url,
+                output: output,
+              }), // Gửi dữ liệu trong body dưới dạng JSON
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Network response was not ok.");
+                }
+                return response.json();
+              })
+              .then((data) => {
+                alert(JSON.stringify(data));
+                this.setState({
+                  loading: false,
+                });
+              })
+              .catch((error) => {
+                alert(`Error: ${error.message}`);
+                this.setState({
+                  loading: false,
+                });
+              });
+          }}
         >
           Submit
         </button>
