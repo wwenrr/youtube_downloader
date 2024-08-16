@@ -24,33 +24,31 @@ function fool(url, output) {
     ];
 
     let ytDlpProcess = spawn(command, args);
-    let data = "";
 
     ytDlpProcess.stdout.on("data", (chunk) => {
-      data += chunk.toString();
+      console.log(chunk.toString());
     });
 
     ytDlpProcess.stderr.on("data", (chunk) => {
-      data += chunk.toString();
+      console.log(chunk.toString());
     });
 
     ytDlpProcess.on("close", (code) => {
       if (code === 0) {
-        resolve(data);
+        resolve("Success");
       } else {
         reject(new Error(`Process exited with code ${code}`));
       }
     });
   })
     .then((data) => {
-      return data;
-      console.log(data);
+      return "successfully";
     })
     .catch((error) => {
-      return error;
+      return "fail";
     });
 }
 
-fool(videoUrl, "D:/backend0/audio/%(title)s.mp4"); // Đảm bảo đường dẫn đầu ra đúng cách
+// fool(videoUrl, "D:/backend0/audio/%(title)s.mp4"); // Đảm bảo đường dẫn đầu ra đúng cách
 
 module.exports = { fool };
