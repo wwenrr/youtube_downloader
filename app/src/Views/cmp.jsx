@@ -59,16 +59,16 @@ class Main extends React.Component {
             this.setState({ loading: true });
             const url = this.state.url;
             const output = this.state.output;
-            console.log(url, output);
+            console.log(url, `${output}/%(title)s.mp4`);
             fetch("http://localhost:5000/api/download", {
-              method: "POST", // Thay đổi phương thức thành POST
+              method: "POST",
               headers: {
-                "Content-Type": "application/json", // Đặt loại nội dung là JSON
+                "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 url: url,
-                output: output,
-              }), // Gửi dữ liệu trong body dưới dạng JSON
+                output: `${output}/%(title)s.mp4`,
+              }),
             })
               .then((response) => {
                 if (!response.ok) {

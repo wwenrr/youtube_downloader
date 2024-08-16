@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "concurrently \"node sever.js\" \"electron .\""
+    "start": "electron .",
+    "package-win": "electron-packager . youtube_downloader --platform=win32 --arch=x64 --out=dist --overwrite"
   },
   "author": "",
   "license": "ISC",
@@ -27,7 +28,29 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "concurrently": "^8.2.2",
-    "electron-builder": "^24.13.3"
+    "concurrently": "^8.2.2"
+  },
+  "build": {
+    "appId": "com.yourapp.id",
+    "productName": "YouTube Downloader",
+    "files": [
+      "app/build/**/*",
+      "sever.js",
+      "main.js",
+      "youtube_downloader/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "asar": true,
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   }
 }

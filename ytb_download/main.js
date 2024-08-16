@@ -5,7 +5,7 @@ const ffmpegPath = require("ffmpeg-static");
 const fs = require("fs");
 
 const command = "yt-dlp";
-const videoUrl = "https://www.youtube.com/watch?v=ISz-xqoOObc";
+const videoUrl = "https://www.youtube.com/watch?v=8aQ-VJuf-mg";
 
 function fool(url, output) {
   return new Promise((resolve, reject) => {
@@ -44,12 +44,13 @@ function fool(url, output) {
   })
     .then((data) => {
       return data;
+      console.log(data);
     })
     .catch((error) => {
       return error;
     });
 }
 
-// fool(videoUrl, "D:/backend0/audio/%(title)s.mp4"); // Đảm bảo đường dẫn đầu ra đúng cách
+fool(videoUrl, "D:/backend0/audio/%(title)s.mp4"); // Đảm bảo đường dẫn đầu ra đúng cách
 
 module.exports = { fool };
