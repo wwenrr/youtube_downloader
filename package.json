@@ -4,8 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently \"node sever.js\" \"electron .\""
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +15,7 @@
     "app": "file:",
     "backend0": "file:",
     "cors": "^2.8.5",
+    "electron": "^31.4.0",
     "express": "^4.19.2",
     "ffmpeg-static": "^5.2.0",
     "react": "^18.3.1",
@@ -26,6 +26,8 @@
     "yt-dlp-wrap": "^2.3.12"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "concurrently": "^8.2.2",
+    "electron-builder": "^24.13.3"
   }
 }

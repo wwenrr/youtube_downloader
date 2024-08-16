@@ -4,10 +4,11 @@ import { logDOM } from "@testing-library/react";
 
 class Main extends React.Component {
   state = {
-    output: "D:/backend0/audio",
+    output: "C:/Users/qscvd/Documents/Vid/sound",
     url: "",
     loading: false,
     edit_output: false,
+    data: [],
   };
 
   render() {
@@ -38,6 +39,11 @@ class Main extends React.Component {
                   output: e.target.value,
                 });
               }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  this.setState({ edit_output: false });
+                }
+              }}
             />
           )}
           {this.state.edit_output === false && (
@@ -45,6 +51,7 @@ class Main extends React.Component {
           )}
         </div>
 
+        <br></br>
         <button
           type="submit"
           disabled={this.state.loading}
@@ -70,25 +77,37 @@ class Main extends React.Component {
                 return response.json();
               })
               .then((data) => {
-                alert(JSON.stringify(data));
+                // alert(JSON.stringify(data));
                 this.setState({
                   loading: false,
+                  data: JSON.stringify(data, null, 2),
                 });
               })
               .catch((error) => {
-                alert(`Error: ${error.message}`);
+                // alert(`Error: ${error.message}`);
                 this.setState({
                   loading: false,
+                  data: JSON.stringify(error, null, 2),
                 });
               });
           }}
         >
           Submit
         </button>
+        <br></br>
+        <button
+          onClick={() => {
+            this.setState({ edit_output: true });
+          }}
+        >
+          Đổi Output
+        </button>
 
         <div className="log_box">
           <div>Log:</div>
-          <div className="log"></div>
+          <div className="log">
+            <div>{this.state.data}</div>
+          </div>
         </div>
       </div>
     );
