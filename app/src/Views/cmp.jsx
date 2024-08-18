@@ -28,7 +28,7 @@ class Main extends React.Component {
             }}
           />
           <select
-            disabled={this.setState.loading}
+            disabled={this.state.loading}
             title="Chọn độ phân giải"
             onChange={(e) => {
               let val = parseInt(e.target.value, 10);
@@ -100,6 +100,11 @@ class Main extends React.Component {
               this.setState({ data: ["Chưa chọn output"] });
               return;
             }
+            if (!/youtube/i.test(this.state.url)) {
+              this.setState({ data: ["Vui lòng nhập link youtube"] });
+              return;
+            }
+
             this.setState({ loading: true, data: [] });
 
             fetch("http://localhost:5000/api/download", {
