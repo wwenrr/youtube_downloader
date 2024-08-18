@@ -7,12 +7,12 @@ const fs = require("fs");
 const command = "yt-dlp";
 const videoUrl = "https://www.youtube.com/watch?v=8aQ-VJuf-mg";
 
-function fool(url, output) {
+function fool(url, output, quality) {
   return new Promise((resolve, reject) => {
     const args = [
       url,
       "-f",
-      "bestvideo[height<=720]+bestaudio/best[height<=720]",
+      `bestvideo[height<=${quality}]+bestaudio/best[height<=720]`,
       "--audio-quality",
       "best",
       "--merge-output-format",

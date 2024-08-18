@@ -16,8 +16,8 @@ app.use(express.json());
 app.post("/api/download", async (req, res) => {
   console.log(req.body);
 
-  const { url, output } = req.body;
-  console.log(url, output);
+  const { url, output, quality } = req.body;
+  console.log(url, output, quality);
 
   if (!url || !output) {
     return res
@@ -26,7 +26,7 @@ app.post("/api/download", async (req, res) => {
   }
 
   try {
-    const result = await fool(url, output);
+    const result = await fool(url, output, quality);
     res.json({ message: "Download started", data: result });
   } catch (error) {
     res.status(500).json({ error: error.message });

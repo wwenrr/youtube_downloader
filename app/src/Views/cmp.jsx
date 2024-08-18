@@ -1,6 +1,6 @@
 import React from "react";
 import style from "./cmp.css";
-import { logDOM } from "@testing-library/react";
+import { logDOM, logRoles } from "@testing-library/react";
 
 class Main extends React.Component {
   state = {
@@ -9,6 +9,7 @@ class Main extends React.Component {
     loading: false,
     edit_output: false,
     data: [],
+    quality: -1,
   };
 
   render() {
@@ -26,6 +27,37 @@ class Main extends React.Component {
               });
             }}
           />
+          <select
+            disabled={this.setState.loading}
+            title="Chọn độ phân giải"
+            onChange={(e) => {
+              let val = parseInt(e.target.value, 10);
+              let notice = [
+                "Lưu ý nếu vid không hỗ trợ độ phân giải thì ưu tiên độ phân giải thấp hơn",
+              ];
+              let arr = [];
+              if (val >= 1080) {
+                arr = ["\nVid chất lượng cao mất nhiều thời gian để tải!"];
+              } else {
+                arr = [];
+              }
+
+              this.setState({
+                data: notice.concat(arr),
+                quality: val,
+              });
+            }}
+          >
+            <option value="-1" selected>
+              Quality
+            </option>
+            <option value="4000">4k</option>
+            <option value="2000">2k</option>
+            <option value="1080">1080</option>
+            <option value="720">720</option>
+            <option value="480">480</option>
+            <option value="360">360</option>
+          </select>
         </div>
 
         <div>
@@ -56,18 +88,29 @@ class Main extends React.Component {
           type="submit"
           disabled={this.state.loading}
           onClick={() => {
-            this.setState({ loading: true });
-            const url = this.state.url;
-            const output = this.state.output;
-            console.log(url, `${output}/%(title)s.mp4`);
+            if (this.state.quality == -1) {
+              this.setState({ data: ["Vui lòng chọn độ phân giải!"] });
+              return;
+            }
+            if (!this.state.url) {
+              this.setState({ data: ["Vui lòng nhập url"] });
+              return;
+            }
+            if (!this.state.output) {
+              this.setState({ data: ["Chưa chọn output"] });
+              return;
+            }
+            this.setState({ loading: true, data: [] });
+
             fetch("http://localhost:5000/api/download", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                url: url,
-                output: `${output}/%(title)s.mp4`,
+                url: this.state.url,
+                output: `${this.state.output}/%(title)s.mp4`,
+                quality: this.state.quality,
               }),
             })
               .then((response) => {
@@ -81,6 +124,7 @@ class Main extends React.Component {
                 this.setState({
                   loading: false,
                   data: JSON.stringify(data, null, 2),
+                  url: "",
                 });
               })
               .catch((error) => {
@@ -88,6 +132,7 @@ class Main extends React.Component {
                 this.setState({
                   loading: false,
                   data: JSON.stringify(error, null, 2),
+                  url: "",
                 });
               });
           }}
@@ -96,8 +141,10 @@ class Main extends React.Component {
         </button>
         <br></br>
         <button
+          disabled={this.state.loading}
           onClick={() => {
-            this.setState({ edit_output: true });
+            let newOutput = !this.state.edit_output;
+            this.setState({ edit_output: newOutput });
           }}
         >
           Đổi Output
@@ -106,7 +153,7 @@ class Main extends React.Component {
         <div className="log_box">
           <div>Log:</div>
           <div className="log">
-            <div>{this.state.data}</div>
+            <pre>{this.state.data}</pre>
           </div>
         </div>
       </div>
